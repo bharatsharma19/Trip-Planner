@@ -9,3 +9,7 @@ wheels/
 # Virtual environments
 .venv
 env
+
+# Environment variables
+.env
+.github/prompts
