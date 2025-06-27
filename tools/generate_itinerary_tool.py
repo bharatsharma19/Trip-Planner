@@ -17,11 +17,19 @@ class Itinerary(BaseModel):
 
 itinerary_llm = get_llm()
 
+# This prompt is now much more forceful and specific about quality.
 ITINERARY_GENERATION_PROMPT = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            """You are a specialized itinerary planning assistant. Your sole purpose is to generate a detailed, day-by-day itinerary based on the user's request. You must output a JSON object that conforms to the `Itinerary` schema. Do not add any other text or explanation.""",
+            """You are a world-renowned travel blogger known for creating exciting and detailed itineraries. Your task is to generate a day-by-day plan.
+
+**CRITICAL INSTRUCTIONS:**
+1.  You MUST output a JSON object that conforms to the `Itinerary` schema. Do not add any other text or explanation.
+2.  For **EVERY SINGLE DAY**, you must provide at least 3-4 distinct, specific, and exciting activities.
+3.  **AVOID GENERIC PHRASES** like "explore the city" or "enjoy local cuisine." Instead, be specific: "Wander through the charming streets of Le Marais," or "Savor a traditional Cacio e Pepe pasta at a Trastevere trattoria."
+4.  Give each day a creative and descriptive title.
+""",
         ),
         (
             "human",

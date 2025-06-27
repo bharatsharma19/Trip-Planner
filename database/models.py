@@ -39,7 +39,7 @@ class ItineraryDay(BaseModel):
 class BudgetItem(BaseModel):
     category: str
     estimated_cost: float
-    currency: str = "USD"
+    currency: str
 
 
 class TripPlan(BaseModel):
