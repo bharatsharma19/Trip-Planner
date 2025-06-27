@@ -1,23 +1,27 @@
 from langchain.tools import tool
 import requests
-import os
+from core.config import settings
 
 
-@tool("weather_info", return_direct=True)
+@tool("weather_info")
 def weather_info(location: str) -> str:
-    """Get weather information for a given city."""
-    api_key = os.getenv("WEATHER_API_KEY")
+    """Get current weather information for a given city."""
+    api_key = settings.WEATHER_API_KEY
+    if not api_key:
+        return "Error: WEATHER_API_KEY is not set."
     url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={location}"
     try:
         resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
         data = resp.json()
         if "current" in data:
             weather = data["current"]
             return (
-                f"Weather in {location}: {weather['temp_c']}°C, "
-                f"{weather['condition']['text']}, Humidity: {weather['humidity']}%"
+                f"The current weather in {location} is {weather['temp_c']}°C "
+                f"and feels like {weather['feelslike_c']}°C. "
+                f"The condition is {weather['condition']['text']} with {weather['humidity']}% humidity."
             )
         else:
-            return f"Could not fetch weather for {location}."
+            return f"Could not fetch weather for {location}. The API might not recognize the location or there might be an issue."
     except Exception as e:
         return f"Weather API error: {e}"
