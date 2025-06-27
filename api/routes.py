@@ -26,7 +26,7 @@ async def query_travel_agent(request: QueryRequest):
             )
 
         # Log the result for debugging
-        logger.debug(f"Result for session {request.session_id}: {result}")
+        logger.info(f"Result for session {request.session_id}: {result}")
 
         return result
 
